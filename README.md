@@ -1,2 +1,2 @@
 # morba-online
-Study project for MEAN stack
+Study project for Flutter
