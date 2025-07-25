@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/contact_model.dart';
 import '../utils/app_theme.dart';
 import '../widgets/contact_category_widget.dart';
@@ -76,9 +77,26 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Morba Online'),
-        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(
+            'assets/images/newLogo.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        title: const Text(
+          'Morba Online',
+          style: TextStyle(
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            letterSpacing: 0.5,
+            fontFamily: 'Roboto',
+          ),
+        ),
+        centerTitle: false,
         elevation: 0,
+        backgroundColor: AppColors.primary,
       ),
       body: Column(
         children: [

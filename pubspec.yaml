@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^6.2.5
   font_awesome_flutter: ^10.7.0
   flutter_tags: ^1.0.0-nullsafety.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:

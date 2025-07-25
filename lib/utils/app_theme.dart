@@ -26,6 +26,7 @@ class AppTheme {
   static ThemeData get theme {
     return ThemeData(
       primaryColor: AppColors.primary,
+      fontFamily: 'Roboto, "Helvetica Neue", sans-serif',
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         primary: AppColors.primary,
