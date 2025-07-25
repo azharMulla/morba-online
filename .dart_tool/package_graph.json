@@ -61,6 +61,27 @@
       ]
     },
     {
+      "name": "font_awesome_flutter",
+      "version": "10.8.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "url_launcher",
+      "version": "6.3.2",
+      "dependencies": [
+        "flutter",
+        "url_launcher_android",
+        "url_launcher_ios",
+        "url_launcher_linux",
+        "url_launcher_macos",
+        "url_launcher_platform_interface",
+        "url_launcher_web",
+        "url_launcher_windows"
+      ]
+    },
+    {
       "name": "cupertino_icons",
       "version": "1.0.8",
       "dependencies": []
@@ -241,29 +262,21 @@
       ]
     },
     {
-      "name": "sky_engine",
-      "version": "0.0.0",
-      "dependencies": []
-    },
-    {
-      "name": "font_awesome_flutter",
-      "version": "10.8.0",
+      "name": "url_launcher_windows",
+      "version": "3.1.4",
       "dependencies": [
-        "flutter"
+        "flutter",
+        "url_launcher_platform_interface"
       ]
     },
     {
-      "name": "url_launcher",
-      "version": "6.3.2",
+      "name": "url_launcher_web",
+      "version": "2.4.1",
       "dependencies": [
         "flutter",
-        "url_launcher_android",
-        "url_launcher_ios",
-        "url_launcher_linux",
-        "url_launcher_macos",
+        "flutter_web_plugins",
         "url_launcher_platform_interface",
-        "url_launcher_web",
-        "url_launcher_windows"
+        "web"
       ]
     },
     {
@@ -272,13 +285,6 @@
       "dependencies": [
         "flutter",
         "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "plugin_platform_interface",
-      "version": "2.1.8",
-      "dependencies": [
-        "meta"
       ]
     },
     {
@@ -298,14 +304,6 @@
       ]
     },
     {
-      "name": "url_launcher_windows",
-      "version": "3.1.4",
-      "dependencies": [
-        "flutter",
-        "url_launcher_platform_interface"
-      ]
-    },
-    {
       "name": "url_launcher_ios",
       "version": "6.3.3",
       "dependencies": [
@@ -314,14 +312,22 @@
       ]
     },
     {
-      "name": "url_launcher_web",
-      "version": "2.4.1",
+      "name": "url_launcher_android",
+      "version": "6.3.16",
       "dependencies": [
         "flutter",
-        "flutter_web_plugins",
-        "url_launcher_platform_interface",
-        "web"
+        "url_launcher_platform_interface"
       ]
+    },
+    {
+      "name": "sky_engine",
+      "version": "0.0.0",
+      "dependencies": []
+    },
+    {
+      "name": "web",
+      "version": "1.1.1",
+      "dependencies": []
     },
     {
       "name": "flutter_web_plugins",
@@ -336,16 +342,10 @@
       ]
     },
     {
-      "name": "web",
-      "version": "1.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "url_launcher_android",
-      "version": "6.3.16",
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
       "dependencies": [
-        "flutter",
-        "url_launcher_platform_interface"
+        "meta"
       ]
     }
   ],
