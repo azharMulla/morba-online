@@ -1,15 +1,36 @@
 class Contact {
   final String name;
   final List<String> tags;
+  final List<String>? displayTags;
   final String phone;
   final String? whatsapp;
+  final String? id;
+  final String? location;
+  final List<String>? img;
 
   Contact({
     required this.name,
     required this.tags,
     required this.phone,
+    this.displayTags,
     this.whatsapp,
+    this.id,
+    this.location,
+    this.img,
   });
+
+  factory Contact.fromJson(Map<String, dynamic> json) {
+    return Contact(
+      name: json['name'] ?? '',
+      tags: (json['tags'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      displayTags: (json['displayTags'] as List?)?.map((e) => e.toString()).toList(),
+      phone: json['number'] ?? json['phone'] ?? '',
+      whatsapp: json['whatsapp'],
+      id: json['id'],
+      location: json['location'],
+      img: (json['img'] as List?)?.map((e) => e.toString()).toList(),
+    );
+  }
 }
 
 class ContactCategory {
@@ -20,6 +41,13 @@ class ContactCategory {
     required this.category,
     required this.providers,
   });
+
+  factory ContactCategory.fromJson(Map<String, dynamic> json) {
+    return ContactCategory(
+      category: json['category'] ?? '',
+      providers: (json['contacts'] as List?)?.map((e) => Contact.fromJson(e)).toList() ?? [],
+    );
+  }
 }
 
 // Sample data

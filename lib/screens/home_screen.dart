@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/contact_model.dart';
 import '../utils/app_theme.dart';
 import '../widgets/contact_category_widget.dart';
+import '../services/contact_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,12 +16,27 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   List<ContactCategory> _filteredCategories = [];
+  List<ContactCategory> _allCategories = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _filteredCategories = sampleContactCategories;
+    _fetchCategories();
     _searchController.addListener(_onSearchChanged);
+  }
+
+  void _fetchCategories() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final service = ContactService();
+    final categories = await service.fetchCategories();
+    setState(() {
+      _allCategories = categories;
+      _filteredCategories = categories;
+      _isLoading = false;
+    });
   }
 
   @override
@@ -39,13 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _filterContacts() {
     if (_searchQuery.isEmpty) {
-      _filteredCategories = sampleContactCategories;
+      _filteredCategories = _allCategories;
       return;
     }
 
     _filteredCategories = [];
     
-    for (var category in sampleContactCategories) {
+    for (var category in _allCategories) {
       final List<Contact> filteredProviders = category.providers.where((provider) {
         // Search in name
         if (provider.name.toLowerCase().contains(_searchQuery)) {
@@ -98,65 +114,52 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         backgroundColor: AppColors.primary,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search contacts...',
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: AppColors.primary,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.secondary,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.secondary,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary,
-                    width: 2.0,
-                  ),
-                ),
-                filled: true,
-                fillColor: AppColors.white,
-                hintStyle: const TextStyle(color: AppColors.secondary),
-              ),
-              cursorColor: AppColors.primary,
-            ),
-          ),
-          Expanded(
-            child: _filteredCategories.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No contacts found',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search contacts... ',
+                      prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+                      filled: true,
+                      fillColor: AppColors.tertiary,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide(color: AppColors.tertiary),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide(color: AppColors.primary, width: 2.0),
                       ),
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: _filteredCategories.length,
-                    itemBuilder: (context, index) {
-                      return ContactCategoryWidget(
-                        category: _filteredCategories[index],
-                      );
-                    },
                   ),
-          ),
-        ],
+                ),
+                Expanded(
+                  child: _filteredCategories.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No contacts found',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: _filteredCategories.length,
+                        itemBuilder: (context, index) {
+                          return ContactCategoryWidget(
+                            category: _filteredCategories[index],
+                          );
+                        },
+                      ),
+                ),
+              ],
       ),
     );
   }

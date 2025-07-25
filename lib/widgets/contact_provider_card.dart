@@ -5,13 +5,20 @@ import '../models/contact_model.dart';
 import '../utils/app_theme.dart';
 import 'tag_widget.dart';
 
-class ContactProviderCard extends StatelessWidget {
+class ContactProviderCard extends StatefulWidget {
   final Contact provider;
 
   const ContactProviderCard({
     super.key,
     required this.provider,
   });
+
+  @override
+  State<ContactProviderCard> createState() => _ContactProviderCardState();
+}
+
+class _ContactProviderCardState extends State<ContactProviderCard> {
+  bool _isHovered = false;
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
@@ -36,29 +43,32 @@ class ContactProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      elevation: 0,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(
-          color: AppColors.background,
-          width: 1.0,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        elevation: _isHovered ? 2.0 : 0,
+        color: _isHovered ? AppColors.tertiary.withOpacity(0.8) : AppColors.tertiary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          side: BorderSide(
+            color: AppColors.tertiary,
+            width: 1.0,
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Row(
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => _makePhoneCall(provider.phone),
+                    onTap: () => _makePhoneCall(widget.provider.phone),
                     child: Text(
-                      provider.name,
+                      widget.provider.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
@@ -66,13 +76,13 @@ class ContactProviderCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (provider.whatsapp != null) ...[
+                if (widget.provider.whatsapp != null) ...[
                   IconButton(
                     icon: const FaIcon(
                       FontAwesomeIcons.whatsapp,
                       color: AppColors.whatsappGreen,
                     ),
-                    onPressed: () => _openWhatsApp(provider.whatsapp!),
+                    onPressed: () => _openWhatsApp(widget.provider.whatsapp!),
                   ),
                 ],
                 IconButton(
@@ -80,17 +90,20 @@ class ContactProviderCard extends StatelessWidget {
                     Icons.phone,
                     color: AppColors.primary,
                   ),
-                  onPressed: () => _makePhoneCall(provider.phone),
+                  onPressed: () => _makePhoneCall(widget.provider.phone),
                 ),
               ],
             ),
             const SizedBox(height: 8.0),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: provider.tags.map((tag) => TagWidget(tag: tag)).toList(),
-            ),
-          ],
+            // Display displayTags instead of tags (tags are used only for search)
+            if (widget.provider.displayTags != null && widget.provider.displayTags!.isNotEmpty)
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 4.0,
+                children: widget.provider.displayTags!.map((tag) => TagWidget(tag: tag)).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );
