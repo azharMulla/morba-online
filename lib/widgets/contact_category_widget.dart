@@ -16,14 +16,20 @@ class ContactCategoryWidget extends StatefulWidget {
 }
 
 class _ContactCategoryWidgetState extends State<ContactCategoryWidget> with SingleTickerProviderStateMixin {
-  bool _isExpanded = false;
+  late bool _isExpanded;
   late AnimationController _controller;
   late Animation<double> _heightFactor;
   
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+    // Expand Doctor category by default
+    _isExpanded = widget.category.category == 'Doctor';
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+      value: _isExpanded ? 1.0 : 0.0, // Set initial value based on expansion state
+    );
     _heightFactor = _controller.drive(CurveTween(curve: Curves.easeInOut));
   }
   
