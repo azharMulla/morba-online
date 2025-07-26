@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/contact_model.dart';
 import '../utils/app_theme.dart';
+import '../screens/contact_details_screen.dart';
 import 'tag_widget.dart';
 
 class ContactProviderCard extends StatefulWidget {
@@ -66,7 +67,18 @@ class _ContactProviderCardState extends State<ContactProviderCard> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => _makePhoneCall(widget.provider.phone),
+                    onTap: () {
+                      if (widget.provider.location != null || (widget.provider.img != null && widget.provider.img!.isNotEmpty)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ContactDetailsScreen(contact: widget.provider),
+                          ),
+                        );
+                      } else {
+                        _makePhoneCall(widget.provider.phone);
+                      }
+                    },
                     child: Text(
                       widget.provider.name,
                       style: const TextStyle(
@@ -76,6 +88,22 @@ class _ContactProviderCardState extends State<ContactProviderCard> {
                     ),
                   ),
                 ),
+                // Show info icon if contact has location or images
+                if (widget.provider.location != null || (widget.provider.img != null && widget.provider.img!.isNotEmpty)) 
+                  IconButton(
+                    icon: const Icon(
+                      Icons.info_outline,
+                      color: AppColors.primary,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContactDetailsScreen(contact: widget.provider),
+                        ),
+                      );
+                    },
+                  ),
                 if (widget.provider.whatsapp != null) ...[
                   IconButton(
                     icon: const FaIcon(
